@@ -62,3 +62,9 @@ cp properties_example ${ENV}.properties
 ### Elasticsearch
 
 * ELASTIC_HOST: Elasticsearch Host
+
+### Backend
+
+* BACKEND_HOST: Coyo-Backend Host
+* BACKEND_USER: Coyo-Backend Management User
+* BACKEND_PASS: Coyo-Backend Management Password
