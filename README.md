@@ -35,8 +35,10 @@ npm install elasticdump
 
 ## Usage
 
+```bash
 ./backup.sh ENV
 ./restore.sh ENV BACKUP_FOLDER
+```
 
 ## Config
 
