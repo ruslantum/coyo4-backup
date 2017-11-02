@@ -15,9 +15,19 @@
 ## Install dependencies on CentOS 7
 
 ```bash
-yum install -y npm git gzip curl mongodb-org-tools.x86_64
+cat > /etc/yum.repos.d/mongo.repo <<EOF
+[mongodb-org-3.2]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/7/mongodb-org/3.2/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-3.2.asc
+EOF
+yum makecache
+yum update -y
+yum install -y epel-release
 yum install -y https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
-yum install -y postgresql96
+yum install -y nodejs git gzip curl mongodb-org-tools postgresql96
 git clone https://github.com/ruslantum/coyo4-backup
 cd coyo4-backup
 npm install elasticdump
