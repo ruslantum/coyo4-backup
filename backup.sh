@@ -32,7 +32,7 @@ else
 fi
 
 # define coyo index types and names
-declare -a types=("analyzer" "mapping" "data")
+declare -a types=("data")
 declare -a indexes=("event" "event-membership" "fulltext-content" "list-entry" "message" "message-channel" "message-channel-status" \
                     "notification" "page" "search" "sender" "sender-role-principle" "timeline-item" "user" "workspace")
 
