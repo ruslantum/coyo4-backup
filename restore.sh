@@ -33,8 +33,10 @@ fi
 
 # define coyo index types and names
 declare -a types=("data")
-declare -a indexes=("event" "event-membership" "fulltext-content" "list-entry" "message" "message-channel" "message-channel-status" \
-                    "notification" "page" "search" "sender" "sender-role-principle" "timeline-item" "user" "workspace")
+declare -a indexes=("comment" "event" "event-membership" "form-entry" "forum-thread" "forum-thread-answer" \
+ "fulltext-content" "list-entry" "message" "message-channel" "message-channel-status" \
+ "notification" "page" "search" "search-values-v2" "sender" "sender-role-principle" \
+ "timeline-item" "user" "workspace")
 
 # create pgpass for passwordless llogin
 echo "*:*:${PG_DB}:${PG_USER}:${PG_PASS}" > ~/.pgpass
