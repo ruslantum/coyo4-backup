@@ -45,10 +45,12 @@ chmod 600 ~/.pgpass
 psql -w -h ${PG_HOST} -U ${PG_USER} coyo -f drop_all.sql > logs/pg_restore.log 2>&1
 gunzip -k -c ${BACKUP_FOLDER}/pg_dump.sql.gz | psql -w -h ${PG_HOST} -U ${PG_USER} ${PG_DB} > logs/pg_restore.log 2>&1
 mongorestore --drop --host ${MONGO_HOST} --gzip --archive=${BACKUP_FOLDER}/mongo_dump.gz > logs/mongo_restore.log 2>&1
-curl -u ${BACKEND_USER}:${BACKEND_PASS} -k -X POST -H "Content-Type: application/json" -d '{"indexNames" : ["fulltext-content", "list-entry", "message-channel-status", "message-channel", "message", "notification", "page", "search", "sender", "timeline-item", "user", "workspace", "event" ] }' "https://${BACKEND_HOST}/manage/index/recreate"
+curl -u ${BACKEND_USER}:${BACKEND_PASS} -k -X POST -H "Content-Type: application/json" -d '{"indexNames" : ["comment", "fulltext-content", "list-entry", "message-channel-status", "message-channel", "message", "notification", "page", "search", "sender", "timeline-item", "user", "workspace"] }' "https://${BACKEND_HOST}/manage/index/recreate"
 for type in "${types[@]}"; do
   for index in "${indexes[@]}"; do
-    ./node_modules/elasticdump/bin/elasticdump --input=${BACKUP_FOLDER}/es/_${index}_${type}.json --output=http://${ELASTIC_HOST}:9200/${index} --type=${type} --limit=${LIMIT} > logs/elastic_restore_${index}_${type}.log 2>&1
+    if [[ -f "${BACKUP_FOLDER}/es/_${index}_${type}.json" ]]; then
+      ./node_modules/elasticdump/bin/elasticdump --input=${BACKUP_FOLDER}/es/_${index}_${type}.json --output=http://${ELASTIC_HOST}:9200/${index} --type=${type} --limit=${LIMIT} > logs/elastic_restore_${index}_${type}.log 2>&1
+    fi
   done
 done
 
