@@ -43,7 +43,7 @@ echo "*:*:${PG_DB}:${PG_USER}:${PG_PASS}" > ~/.pgpass
 chmod 600 ~/.pgpass
 
 psql -w -h ${PG_HOST} -U ${PG_USER} coyo -f drop_all.sql > logs/pg_restore.log 2>&1
-gunzip -k -c ${BACKUP_FOLDER}/pg_dump.sql.gz | psql -w -h ${PG_HOST} -U ${PG_USER} ${PG_DB} > logs/pg_restore.log 2>&1
+gunzip -c ${BACKUP_FOLDER}/pg_dump.sql.gz | psql -w -h ${PG_HOST} -U ${PG_USER} ${PG_DB} > logs/pg_restore.log 2>&1
 mongorestore --drop --host ${MONGO_HOST} --gzip --archive=${BACKUP_FOLDER}/mongo_dump.gz > logs/mongo_restore.log 2>&1
 curl -u ${BACKEND_USER}:${BACKEND_PASS} -k -X POST -H "Content-Type: application/json" -d '{"indexNames" : ["comment", "fulltext-content", "list-entry", "message-channel-status", "message-channel", "message", "notification", "page", "search", "sender", "timeline-item", "user", "workspace"] }' "https://${BACKEND_HOST}/manage/index/recreate"
 for type in "${types[@]}"; do
