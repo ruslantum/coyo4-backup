@@ -46,7 +46,7 @@ mkdir -p $BACKUP_FOLDER/es
 echo "*:*:${PG_DB}:${PG_USER}:${PG_PASS}" > ~/.pgpass
 chmod 600 ~/.pgpass
 
-pg_dump -cC -w -h ${PG_HOST} -U ${PG_USER} ${PG_DB} | gzip > ${BACKUP_FOLDER}/pg_dump.sql.gz &
+pg_dump -w -h ${PG_HOST} -U ${PG_USER} ${PG_DB} | grep -vw "idle_in_transaction_session_timeout" | gzip > ${BACKUP_FOLDER}/pg_dump.sql.gz &
 mongodump --host ${MONGO_HOST} --db ${MONGO_DB} --gzip --archive=${BACKUP_FOLDER}/mongo_dump.gz > logs/mongo_dump.log 2>&1 &
 for type in "${types[@]}"; do
   for index in "${indexes[@]}"; do
