@@ -7,7 +7,6 @@ if [[ $# -eq 0 ]] ; then
     exit 1
 fi
 ENV=${1}
-BACKUP_FOLDER="/var/backups/$(date +%F)_${ENV}"
 LIMIT=1000
 # ensure dump utils are installed
 if ! [ -x "$(command -v pg_dump)" ]; then
@@ -30,6 +29,7 @@ else
   echo "No such enviroment: ${ENV}"
   exit 1
 fi
+BACKUP_FOLDER="${BACKUP_FOLDER}/$(date +%F)_${ENV}"
 
 # define coyo index types and names
 declare -a types=("data")

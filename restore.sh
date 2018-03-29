@@ -7,7 +7,7 @@ if [[ $# -eq 0 ]] ; then
     exit 1
 fi
 ENV=${1}
-BACKUP_FOLDER=${2}
+DATE=${2}
 LIMIT=1000
 # ensure dump utils are installed
 if ! [ -x "$(command -v pg_restore)" ]; then
@@ -30,6 +30,8 @@ else
   echo "No such enviroment: ${ENV}"
   exit 1
 fi
+BACKUP_FOLDER="${BACKUP_FOLDER}/${DATE}_${ENV}"
+
 
 # define coyo index types and names
 declare -a types=("data")

@@ -37,7 +37,7 @@ npm install elasticdump
 
 ```bash
 ./backup.sh ENV
-./restore.sh ENV BACKUP_FOLDER
+./restore.sh ENV BACKUP_DATE (YYYY-MM-DD)
 ```
 
 ## Config
@@ -46,6 +46,8 @@ Save config in the same folder as ${ENV}.properties file:
 ```bash
 cp properties_example ${ENV}.properties
 ```
+### Backup Folder
+* BACKUP_FOLDER: Configure where to save Coyo backups
 
 ### Postgres
 

@@ -1,3 +1,5 @@
+BACKUP_FOLDER=/var/backups
+
 PG_HOST=localhost
 PG_USER=postgres
 PG_PASS=coyo4postgres
