@@ -46,8 +46,8 @@ mkdir -p $BACKUP_FOLDER/es
 echo "*:*:${PG_DB}:${PG_USER}:${PG_PASS}" > ~/.pgpass
 chmod 600 ~/.pgpass
 
-pg_dump -w -h ${PG_HOST} -U ${PG_USER} ${PG_DB} | grep -vw "idle_in_transaction_session_timeout" | gzip > ${BACKUP_FOLDER}/pg_dump.sql.gz &
-mongodump --host ${MONGO_HOST} --db ${MONGO_DB} --gzip --archive=${BACKUP_FOLDER}/mongo_dump.gz > logs/mongo_dump.log 2>&1 &
+pg_dump -w -h ${PG_HOST} -U ${PG_USER} ${PG_DB} | grep -vw "idle_in_transaction_session_timeout" > ${BACKUP_FOLDER}/pg_dump.sql &
+mongodump --host ${MONGO_HOST} --db ${MONGO_DB} --archive=${BACKUP_FOLDER}/mongo_dump > logs/mongo_dump.log 2>&1 &
 for type in "${types[@]}"; do
   for index in "${indexes[@]}"; do
     ./node_modules/elasticdump/bin/elasticdump --input=http://${ELASTIC_HOST}:9200/${index} --output=${BACKUP_FOLDER}/es/_${index}_${type}.json --type=${type} --limit=${LIMIT} > logs/elastic_dump.log 2>&1 &
