@@ -8,7 +8,7 @@ PG_DB=coyo
 MONGO_HOST=localhost
 MONGO_DB=coyo-files
 
-ELASTIC_HOST=localhost
+ELASTIC_URL=http://localhost:9200
 
 BACKEND_HOST=localhost
 BACKEND_USER=admin

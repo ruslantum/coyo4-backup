@@ -30,19 +30,19 @@ yum install -y https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x
 yum install -y nodejs git gzip curl mongodb-org-tools postgresql96
 git clone https://github.com/ruslantum/coyo4-backup
 cd coyo4-backup
-npm install elasticdump
+npm install -g elasticdump
 ```
 
 ## Usage
 
 ```bash
-./backup.sh ENV
-./restore.sh ENV BACKUP_DATE (YYYY-MM-DD)
+bin/backup.sh ENV
+bin/restore.sh ENV BACKUP_DATE (YYYY-MM-DD)
 ```
 
 ## Config
 
-Save config in the same folder as ${ENV}.properties file:
+Save config in conf folder as ${ENV}.properties file:
 ```bash
 cp properties_example ${ENV}.properties
 ```
@@ -63,7 +63,7 @@ cp properties_example ${ENV}.properties
 
 ### Elasticsearch
 
-* ELASTIC_HOST: Elasticsearch Host
+* ELASTIC_URL: Elasticsearch URL with protocol and port
 
 ### Backend
 

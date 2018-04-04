@@ -17,16 +17,16 @@ if ! [ -x "$(command -v mongodump)" ]; then
   echo 'Error: mongodump is not installed.' >&2
   exit 1
 fi
-if ! [ -x "$(command -v node_modules/elasticdump/bin/elasticdump)" ]; then
-  echo 'Error: elasticdump is not installed. Install with npm install elasticdump' >&2
+if ! [ -x "$(command -v elasticdump)" ]; then
+  echo 'Error: elasticdump is not installed. Install with npm install -g elasticdump' >&2
   exit 1
 fi
 
 # load config
-if [ -f ${ENV}.properties ]; then
-  . ${ENV}.properties
+if [ -f ./conf/${ENV}.properties ]; then
+  . ./conf/${ENV}.properties
 else
-  echo "No such enviroment: ${ENV}"
+  echo "No such enviroment: .conf/${ENV}"
   exit 1
 fi
 BACKUP_FOLDER="${BACKUP_FOLDER}/$(date +%F)_${ENV}"
@@ -50,8 +50,8 @@ pg_dump -w -h ${PG_HOST} -U ${PG_USER} ${PG_DB} | grep -vw "idle_in_transaction_
 mongodump --host ${MONGO_HOST} --db ${MONGO_DB} --archive=${BACKUP_FOLDER}/mongo_dump > logs/mongo_dump.log 2>&1 &
 for type in "${types[@]}"; do
   for index in "${indexes[@]}"; do
-    ./node_modules/elasticdump/bin/elasticdump --input=http://${ELASTIC_HOST}:9200/${index} --output=${BACKUP_FOLDER}/es/_${index}_${type}.json --type=${type} --limit=${LIMIT} > logs/elastic_dump.log 2>&1 &
+    elasticdump --input=${ELASTIC_URL}/${index} --output=${BACKUP_FOLDER}/es/_${index}_${type}.json --type=${type} --limit=${LIMIT} > logs/elastic_dump.log 2>&1 &
   done
 done
 
-exit 0
+wait %1 %2 && exit 0

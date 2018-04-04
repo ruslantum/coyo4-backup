@@ -18,16 +18,16 @@ if ! [ -x "$(command -v mongodump)" ]; then
   echo 'Error: mongodump is not installed.' >&2
   exit 1
 fi
-if ! [ -x "$(command -v node_modules/elasticdump/bin/elasticdump)" ]; then
-  echo 'Error: elasticdump is not installed. Install with npm install elasticdump' >&2
+if ! [ -x "$(command -v elasticdump)" ]; then
+  echo 'Error: elasticdump is not installed. Install with npm install -g elasticdump' >&2
   exit 1
 fi
 
 # load config
-if [ -f ${ENV}.properties ]; then
-  . ${ENV}.properties
+if [ -f ./conf/${ENV}.properties ]; then
+  . ./conf/${ENV}.properties
 else
-  echo "No such enviroment: ${ENV}"
+  echo "No such enviroment: ./conf/${ENV}"
   exit 1
 fi
 BACKUP_FOLDER="${BACKUP_FOLDER}/${DATE}_${ENV}"
@@ -44,14 +44,14 @@ declare -a indexes=("comment" "event" "event-membership" "form-entry" "forum-thr
 echo "*:*:${PG_DB}:${PG_USER}:${PG_PASS}" > ~/.pgpass
 chmod 600 ~/.pgpass
 
-psql -w -h ${PG_HOST} -U ${PG_USER} coyo -f drop_all.sql > logs/pg_restore.log 2>&1
+psql -w -h ${PG_HOST} -U ${PG_USER} coyo -f ./bin/drop_all.sql > logs/pg_restore.log 2>&1
 psql -w -h ${PG_HOST} -U ${PG_USER} ${PG_DB} -f ${BACKUP_FOLDER}/pg_dump.sql > logs/pg_restore.log 2>&1
 mongorestore --drop --host ${MONGO_HOST} --archive=${BACKUP_FOLDER}/mongo_dump > logs/mongo_restore.log 2>&1
 curl -u ${BACKEND_USER}:${BACKEND_PASS} -k -X POST -H "Content-Type: application/json" -d '{"indexNames" : ["comment", "fulltext-content", "list-entry", "message-channel-status", "message-channel", "message", "notification", "page", "search", "sender", "timeline-item", "user", "workspace"] }' "https://${BACKEND_HOST}/manage/index/recreate"
 for type in "${types[@]}"; do
   for index in "${indexes[@]}"; do
     if [[ -f "${BACKUP_FOLDER}/es/_${index}_${type}.json" ]]; then
-      ./node_modules/elasticdump/bin/elasticdump --input=${BACKUP_FOLDER}/es/_${index}_${type}.json --output=http://${ELASTIC_HOST}:9200/${index} --type=${type} --limit=${LIMIT} > logs/elastic_restore_${index}_${type}.log 2>&1
+      elasticdump --input=${BACKUP_FOLDER}/es/_${index}_${type}.json --output=${ELASTIC_URL}/${index} --type=${type} --limit=${LIMIT} > logs/elastic_restore_${index}_${type}.log 2>&1
     fi
   done
 done
