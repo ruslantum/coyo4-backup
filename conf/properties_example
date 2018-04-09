@@ -10,6 +10,6 @@ MONGO_DB=coyo-files
 
 ELASTIC_URL=http://localhost:9200
 
-BACKEND_HOST=localhost
+BACKEND_URL=https://localhost
 BACKEND_USER=admin
 BACKEND_PASS=coyo4admin

@@ -67,6 +67,6 @@ cp properties_example ${ENV}.properties
 
 ### Backend
 
-* BACKEND_HOST: Coyo-Backend Host
+* BACKEND_URL: Coyo-Backend URL with protocol and port
 * BACKEND_USER: Coyo-Backend Management User
 * BACKEND_PASS: Coyo-Backend Management Password

@@ -47,7 +47,7 @@ chmod 600 ~/.pgpass
 psql -w -h ${PG_HOST} -U ${PG_USER} coyo -f ./bin/drop_all.sql > logs/pg_restore.log 2>&1
 psql -w -h ${PG_HOST} -U ${PG_USER} ${PG_DB} -f ${BACKUP_FOLDER}/pg_dump.sql > logs/pg_restore.log 2>&1
 mongorestore --drop --host ${MONGO_HOST} --archive=${BACKUP_FOLDER}/mongo_dump > logs/mongo_restore.log 2>&1
-curl -u ${BACKEND_USER}:${BACKEND_PASS} -k -X POST -H "Content-Type: application/json" -d '{"indexNames" : ["comment", "fulltext-content", "list-entry", "message-channel-status", "message-channel", "message", "notification", "page", "search", "sender", "timeline-item", "user", "workspace"] }' "https://${BACKEND_HOST}/manage/index/recreate"
+curl -u ${BACKEND_USER}:${BACKEND_PASS} -k -X POST -H "Content-Type: application/json" -d '{"indexNames" : ["comment", "fulltext-content", "list-entry", "message-channel-status", "message-channel", "message", "notification", "page", "search", "sender", "timeline-item", "user", "workspace"] }' "${BACKEND_URL}/manage/index/recreate"
 for type in "${types[@]}"; do
   for index in "${indexes[@]}"; do
     if [[ -f "${BACKUP_FOLDER}/es/_${index}_${type}.json" ]]; then
