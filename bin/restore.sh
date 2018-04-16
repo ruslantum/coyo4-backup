@@ -38,7 +38,7 @@ declare -a types=("data")
 declare -a indexes=("comment" "event" "event-membership" "form-entry" "forum-thread" "forum-thread-answer" \
  "fulltext-content" "list-entry" "message" "message-channel" "message-channel-status" \
  "notification" "page" "search" "search-values-v2" "sender" "sender-role-principle" \
- "timeline-item" "user" "workspace")
+ "timeline-item" "timeline-item-v2" "user" "workspace")
 
 # create pgpass for passwordless llogin
 echo "*:*:${PG_DB}:${PG_USER}:${PG_PASS}" > ~/.pgpass
